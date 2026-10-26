@@ -4,6 +4,7 @@
 	import BlockProfileButton from "./BlockProfileButton.svelte";
 	import EditProfileButton from "./EditProfileButton.svelte";
 	import FavoriteProfileToggle from "./FavoriteProfileToggle.svelte";
+	import SendViewButton from "./SendViewButton.svelte";
 
 	let {
 		ourProfile,
@@ -11,12 +12,14 @@
 		changingViewability,
 		markBlocked,
 		onFavorite,
+		onSendView = null,
 	}: {
 		ourProfile: boolean;
 		profile: Profile | null;
 		changingViewability: boolean;
 		markBlocked: () => PendingViewabilityChange;
 		onFavorite: (isFavorite: boolean) => void;
+		onSendView: null | (() => Promise<void>);
 	} = $props();
 </script>
 
@@ -39,6 +42,9 @@
 				{changingViewability}
 				{markBlocked}
 			/>
+			{#if onSendView}
+				<SendViewButton {onSendView} />
+			{/if}
 		{/if}
 	</nav>
 {/if}

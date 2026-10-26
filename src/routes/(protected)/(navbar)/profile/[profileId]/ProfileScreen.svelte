@@ -249,6 +249,9 @@
 						markBlocked={() => profileState.markBlocked()}
 						onFavorite={(isFavorite) =>
 							profileState.setFavorite(isFavorite)}
+						onSendView={profileState.viewSent
+							? null
+							: () => profileState.manuallyRecordView()}
 					/>
 					<div
 						class={[

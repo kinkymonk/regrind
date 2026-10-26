@@ -48,6 +48,7 @@ export class ProfileState {
 	profile: Profile | null = $state(null);
 	loading = $state(true);
 	refreshing = $state(false);
+	viewSent = $state(false);
 	error: Error | null = $state(null);
 	changingViewability = $state(false);
 
@@ -241,11 +242,25 @@ export class ProfileState {
 		}
 	}
 
+	async manuallyRecordView(): Promise<void> {
+		try {
+			await recordProfileView({ profileId: this.profileId });
+			this.viewSent = true;
+		} catch (error) {
+			console.error(error);
+			showErrorToast({
+				label: "Failed to record profile view preference or action",
+				error,
+			});
+		}
+	}
+
 	async #recordView(): Promise<void> {
 		try {
 			const { revealProfileViews } = await getPreferences();
 			if (!revealProfileViews) return;
 			await recordProfileView({ profileId: this.profileId });
+			this.viewSent = true;
 		} catch (error) {
 			console.error(error);
 			showErrorToast({
